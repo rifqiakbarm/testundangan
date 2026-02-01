@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wedding Invitation</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Poppins:wght@300;400&display=swap" rel="stylesheet">
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:'Poppins',sans-serif;
+  background:#f9f6f2;
+  color:#333;
+  overflow-x:hidden;
+}
+
+/* LOCK SCREEN */
+.lock{
+  position:fixed;
+  inset:0;
+  background:linear-gradient(rgba(0,0,0,.6),rgba(0,0,0,.6)),
+  url('https://images.unsplash.com/photo-1523438885200-e635ba2c371e') center/cover;
+  color:white;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  z-index:999;
+  transition:1s ease;
+}
+
+.lock.hide{
+  opacity:0;
+  pointer-events:none;
+}
+
+.lock h1{
+  font-family:'Playfair Display',serif;
+  font-size:2.4rem;
+}
+
+.lock .guest{
+  margin-top:20px;
+  padding:10px 25px;
+  border-radius:30px;
+  background:rgba(255,255,255,.2);
+}
+
+.open-btn{
+  margin-top:30px;
+  padding:14px 36px;
+  border:none;
+  border-radius:40px;
+  background:#c19a6b;
+  color:white;
+  font-size:1rem;
+  cursor:pointer;
+}
+
+/* MAIN */
+section{padding:70px 20px;text-align:center}
+h1,h2{font-family:'Playfair Display',serif}
+
+.hero{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+}
+
+.card{
+  background:white;
+  border-radius:20px;
+  padding:35px 25px;
+  max-width:520px;
+  margin:25px auto;
+  box-shadow:0 15px 35px rgba(0,0,0,.08);
+  opacity:0;
+  transform:translateY(30px);
+  transition:1s ease;
+}
+.card.show{opacity:1;transform:translateY(0)}
+
+.arabic{
+  font-size:1.4rem;
+  line-height:2.2rem;
+  direction:rtl;
+}
+
+.countdown{
+  display:flex;
+  justify-content:space-around;
+  margin-top:20px;
+  font-weight:bold;
+}
+
+.btn{
+  display:inline-block;
+  margin-top:25px;
+  padding:12px 30px;
+  background:#c19a6b;
+  color:white;
+  border-radius:30px;
+  text-decoration:none;
+}
+
+footer{padding:40px;font-size:.85rem;color:#777}
+
+/* DASHBOARD */
+iframe{
+  width:100%;
+  border:none;
+  height:320px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- LOCK SCREEN -->
+<div class="lock" id="lockScreen">
+  <h1>Rifqi & Partner</h1>
+  <div class="guest" id="guestName">Dear Guest</div>
+  <button class="open-btn" onclick="openInvite()">Open Invitation</button>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <h1>Farah & Rifqi</h1>
+  <p>We Are Getting Married</p>
+</section>
+
+<!-- ISLAMIC QUOTE -->
+<section>
+  <div class="card reveal">
+    <p class="arabic">
+      وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُمْ مِنْ أَنْفُسِكُمْ أَزْوَاجًا لِتَسْكُنُوا إِلَيْهَا
+      وَجَعَلَ بَيْنَكُمْ مَوَدَّةً وَرَحْمَةً
+    </p>
+    <p>
+      “And among His signs is that He created for you spouses from among yourselves so that you may find tranquility in them,
+      and He placed between you affection and mercy.”
+    </p>
+    <i>(Q.S. Ar-Rum: 21)</i>
+  </div>
+</section>
+
+<!-- DETAILS -->
+<section>
+  <div class="card reveal">
+    <h2>Wedding Day</h2>
+    <p>Saturday, 20 July 2026</p>
+    <p>10:00 AM – Finish</p>
+    <p>Bandung, Indonesia</p>
+
+    <div class="countdown">
+      <div><span id="days">0</span><br>Days</div>
+      <div><span id="hours">0</span><br>Hours</div>
+      <div><span id="minutes">0</span><br>Minutes</div>
+      <div><span id="seconds">0</span><br>Seconds</div>
+    </div>
+
+    <a class="btn" href="https://maps.app.goo.gl/4h26A2jVQZuLyDKL8" target="_blank">Open Map</a>
+  </div>
+</section>
+
+<!-- RSVP -->
+<section>
+  <div class="card reveal">
+    <h2>RSVP</h2>
+    <a class="btn" href="https://forms.gle/your-form-link" target="_blank">Fill RSVP Form</a>
+  </div>
+</section>
+
+<!-- ATTENDANCE DASHBOARD -->
+<section>
+  <div class="card reveal">
+    <h2>Guest Attendance</h2>
+
+    <!-- Replace src with your PUBLISHED Google Sheets chart -->
+    <iframe src="https://docs.google.com/spreadsheets/d/e/PASTE_YOUR_CHART_LINK/pubchart?oid=123456&format=interactive"></iframe>
+
+    <p style="margin-top:10px;font-size:.85rem">
+      Live update from RSVP responses
+    </p>
+  </div>
+</section>
+
+<footer>With love ❤️</footer>
+
+<!-- MUSIC -->
+<audio id="bgMusic" loop>
+  <source src="https://www.bensound.com/bensound-music/bensound-love.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+// Countdown
+const weddingDate=new Date("April 12, 2026 10:00:00").getTime();
+setInterval(()=>{
+  const d=weddingDate-new Date().getTime();
+  days.innerText=Math.floor(d/(1000*60*60*24));
+  hours.innerText=Math.floor((d/(1000*60*60))%24);
+  minutes.innerText=Math.floor((d/(1000*60))%60);
+  seconds.innerText=Math.floor((d/1000)%60);
+},1000);
+
+// Guest name
+const guest=new URLSearchParams(location.search).get("to");
+if(guest) guestName.innerText="Dear "+decodeURIComponent(guest);
+
+// Open invitation
+function openInvite(){
+  lockScreen.classList.add("hide");
+  bgMusic.play();
+}
+
+// Reveal animation
+const cards=document.querySelectorAll(".reveal");
+window.addEventListener("scroll",()=>{
+  cards.forEach(c=>{
+    if(c.getBoundingClientRect().top<window.innerHeight-80){
+      c.classList.add("show");
+    }
+  });
+});
+</script>
+
+</body>
+</html>
